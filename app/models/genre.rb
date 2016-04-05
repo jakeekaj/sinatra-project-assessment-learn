@@ -1,10 +1,11 @@
-class Movie < ActiveRecord::Base
+class Genre < ActiveRecord::Base
   belongs_to :user
-  has_many :actor_movies
-  has_many :actors, :through => :actor_movies
+  has_many :actor_genres
+  has_many :actors, :through => :actor_genres
   has_many :movie_genres
   has_many :genres, :through => :movie_genres
-
+  has_many :show_genres
+  has_many :shows, :through => :show_genres
 
   def slug
   	x = self.username
@@ -13,7 +14,7 @@ class Movie < ActiveRecord::Base
   end
 
   def self.find_by_slug(slug)
-  	x = Movie.all.find do |a|
+  	x = Genre.all.find do |a|
       a.slug == slug
   	  end
     x

@@ -1,80 +1,80 @@
-class TweetsController < ApplicationController
+class MoviesController < ApplicationController
 
 
-  get '/tweets' do
+  get '/movies' do
     if !logged_in?
       redirect "/login"
     else
     @user = current_user
     @users = User.all
-    @tweets = Tweet.all
-    erb :'tweets/index'
+    @movies = Movie.all
+    erb :'movies/index'
    end
   end
 
 
-  get '/tweets/new' do
+  get '/movies/new' do
     if !logged_in?
       redirect "/login"
     else
-    erb :'tweets/new'
+    erb :'movies/new'
     end
   end
 
-  post '/tweets' do
+  post '/movies' do
     if params[:content] == "" 
-      redirect '/tweets/new'
+      redirect '/movies/new'
     else
-    @tweet = Tweet.create(content: params[:content], user_id: current_user.id)
-    redirect '/tweets/' + @tweet.id.to_s
+    @movie = Movie.create(content: params[:content], user_id: current_user.id)
+    redirect '/movies/' + @movie.id.to_s
     end  
   end
 
 
 
-  get '/tweets/:id' do
+  get '/movies/:id' do
     if !logged_in?
       redirect "/login"
     else
-    @tweet = Tweet.find(params[:id])
-    erb :'tweets/show'
+    @movie = Movie.find(params[:id])
+    erb :'movies/show'
     end
   end
 
-  get '/tweets/:id/edit' do
+  get '/movies/:id/edit' do
     if !logged_in?
       redirect "/login"
     else
-    @tweet = Tweet.find(params[:id])
-      if current_user.tweets.include?(@tweet)
-        if @tweet == nil
-          redirect "/tweets"
+    @movie = Movie.find(params[:id])
+      if current_user.movies.include?(@movie)
+        if @movie == nil
+          redirect "/movies"
         else
-          erb :'tweets/edit'
+          erb :'movies/edit'
         end
       else
-        redirect '/tweets'
+        redirect '/movies'
       end
     end
   end
 
-  patch '/tweets/:id' do
-    @tweet = Tweet.find(params[:id])
+  patch '/movies/:id' do
+    @movie = Movie.find(params[:id])
     if params[:content] == "" 
-      redirect '/tweets/' + @tweet.id.to_s + '/edit'
+      redirect '/movies/' + @movie.id.to_s + '/edit'
     else
-    @tweet.content = params[:content]
-    @tweet.save
-    redirect '/tweets/' + @tweet.id.to_s
+    @movie.content = params[:content]
+    @movie.save
+    redirect '/movies/' + @movie.id.to_s
     end
   end
 
-  delete '/tweets/:id/delete' do
-    if current_user.tweets.include?(Tweet.find(params[:id]))
-    Tweet.find(params[:id]).destroy
-    redirect '/tweets'
+  delete '/movies/:id/delete' do
+    if current_user.movies.include?(Movie.find(params[:id]))
+    Movie.find(params[:id]).destroy
+    redirect '/movies'
     else
-    redirect '/tweets'
+    redirect '/movies'
     end
   end
 

@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
   has_secure_password
-  has_many :tweets
+  has_many :actors
+  has_many :genres
+  has_many :shows
+  has_many :movies
 
   def slug
   	x = self.username
