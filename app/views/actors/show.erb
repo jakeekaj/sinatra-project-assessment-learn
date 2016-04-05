@@ -1,0 +1,21 @@
+
+<h4>Content: <%= @tweet.content %></h4>
+
+<form action="/tweets/<%=@tweet.id%>/delete" method="post" id="form1">
+        <input id="hidden" type="hidden" name="_method" value="DELETE">
+
+    </form>
+
+<button type="submit" form="form1" value="Delete Tweet">Delete Tweet</button>
+
+<form action="/tweets/<%=@tweet.id%>/edit" method="get" id="form2">
+
+    </form>
+
+<button type="submit" form="form2" value="Edit Tweet">Edit Tweet</button>
+
+<form action="/tweets" method="get" id="form3">
+
+    </form>
+
+<button type="submit" form="form3" value="Back to Index">Back to Index</button>

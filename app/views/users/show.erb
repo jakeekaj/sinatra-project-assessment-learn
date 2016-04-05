@@ -1,0 +1,10 @@
+<h2><%= @user.username %></h2>
+<% @user.tweets.all.each do |tweet| %>
+<h4>Tweet: <a href='/tweets/<%= tweet.id %>'> <%= tweet.content %> </a> </h4>
+<% end %>
+
+<form action="/tweets" method="get" id="form3">
+
+    </form>
+
+<button type="submit" form="form3" value="Back to Index">Back to Index</button>
