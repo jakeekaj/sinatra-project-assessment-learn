@@ -20,58 +20,117 @@ class MoviesController < ApplicationController
   end
 
   post '/movies' do
-    if params[:content] == "" 
+    if params[:title] == "" 
+      #flash[:error] = "Please enter a Title"
       redirect '/movies/new'
     else
-    @movie = Movie.create(content: params[:content], user_id: current_user.id)
-    redirect '/movies/' + @movie.id.to_s
+    @movie = Movie.create(title: params[:title],year: params[:year], user_id: current_user.id)
+    ##Handle actors
+    if params[:actor1] != ""
+    a = Actor.create(name: params[:actor1], user_id: current_user.id)
+    @movie.actors << a
+    end
+    if params[:actor2] != ""
+    b = Actor.create(name: params[:actor2], user_id: current_user.id)
+    @movie.actors << b
+    end
+    params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @movie.actors << c
+    end
+    ##Handle genres
+    if params[:genre1] != ""
+    d = Genre.create(name: params[:genre1], user_id: current_user.id)
+    @movie.genres << d
+    end
+    if params[:genre2] != ""
+    e = Genre.create(name: params[:genre2], user_id: current_user.id)
+    @movie.genres << e
+    end
+    params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @movie.genres << f
+    end
+
+    @movie.save
+    redirect '/movies/' + @movie.slug
     end  
   end
 
 
 
-  get '/movies/:id' do
+  get '/movies/:slug' do
     if !logged_in?
       redirect "/login"
     else
-    @movie = Movie.find(params[:id])
+    @movie = Movie.find_by_slug(params[:slug])
     erb :'movies/show'
     end
   end
 
-  get '/movies/:id/edit' do
+  get '/movies/:slug/edit' do
     if !logged_in?
       redirect "/login"
     else
-    @movie = Movie.find(params[:id])
-      if current_user.movies.include?(@movie)
-        if @movie == nil
-          redirect "/movies"
-        else
-          erb :'movies/edit'
-        end
+    @movie = Movie.find_by_slug(params[:slug])
+    if @movie == nil
+      #flash[:error] = "Movie does not exist"
+      redirect "/movies"
       else
-        redirect '/movies'
+      if current_user.movies.include?(@movie)
+          erb :'movies/edit'
+        else
+        #flash[:error] = "You are not authorized to edit this movie."
+        redirect '/movies/' + @movie.slug
+      end
       end
     end
   end
 
-  patch '/movies/:id' do
-    @movie = Movie.find(params[:id])
-    if params[:content] == "" 
-      redirect '/movies/' + @movie.id.to_s + '/edit'
+  patch '/movies/:slug' do
+    @movie = Movie.find_by_slug(params[:slug])
+    if params[:title] == "" 
+      #flash[:error] = "Please enter a Title"
+      redirect '/movies/' + @movie.slug + '/edit'
     else
-    @movie.content = params[:content]
+    @movie.title = params[:title]
+    @movie.year = params[:year]
+    if params[:actor1] != ""
+    a = Actor.create(name: params[:actor1], user_id: current_user.id)
+    @movie.actors << a
+    end
+    if params[:actor2] != ""
+    b = Actor.create(name: params[:actor2], user_id: current_user.id)
+    @movie.actors << b
+    end
+    if params[:genre1] != ""
+    d = Genre.create(name: params[:genre1], user_id: current_user.id)
+    @movie.genres << d
+    end
+    if params[:genre2] != ""
+    e = Genre.create(name: params[:genre2], user_id: current_user.id)
+    @movie.genres << e
+    end
+    params[:movie][:actor_ids].each do |actor|
+      j = Actor.find(actor)
+      @movie.actors << j
+    end
+
+    params[:movie][:genre_ids].each do |genre|
+      x = Genre.find(genre)
+      @movie.genres << x
+    end
     @movie.save
-    redirect '/movies/' + @movie.id.to_s
+    redirect '/movies/' + @movie.slug
     end
   end
 
-  delete '/movies/:id/delete' do
-    if current_user.movies.include?(Movie.find(params[:id]))
-    Movie.find(params[:id]).destroy
+  delete '/movies/:slug/delete' do
+    if current_user.movies.include?(Movie.find_by_slug(params[:slug]))
+    Movie.find_by_slug(params[:slug]).destroy
     redirect '/movies'
     else
+    #flash[:error] = "You are not authorized to delete this movie."
     redirect '/movies'
     end
   end

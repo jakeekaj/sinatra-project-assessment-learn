@@ -1,6 +1,23 @@
-    <form action="/tweets/<%=@tweet.id%>" method="post" id="form1">
+    <form action="/movies/<%=@move.slug %>" method="post" id="form1">
         <input id="hidden" type="hidden" name="_method" value="PATCH">
-      <p><label> Content: </label> <input type="text" name="content" value="<%= @tweet.content %>" id="content"></input></p>
+      <p><label> Title: </label> <input type="text" name="content" value="<%= @tweet.content %>" id="content"></input></p>
+      <p><label> Year: </label> <input type="text" name="content" value="<%= @tweet.content %>" id="content"></input></p>
+
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor1" id="actor1"></p>
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor2" id="actor2"></p>
+
+	  <label>Add existing Actor:</label><br></br>
+	  <% Actor.all.each do |a| %>
+	  <input type="checkbox" name="movie[actor_ids][]" value="<%= a.id %>" <%='checked' if @movie.actors.include?(a) %>><%=a.name%></input>
+	  <% end %>
+
+	  <p><label> Add a new genre:(optional) </label> <input type="text" name="genre1" id="genre1"></p>
+      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre2" id="genre2"></p>
+
+	  <label>Add existing Genre:</label><br></br>
+	  <% Genre.all.each do |g| %>
+	  <input type="checkbox" name="movie[genre_ids][]" value="<%= g.id %>" <%='checked' if @movie.genres.include?(g) %>><%=g.name%></input>
+	  <% end %>
 
     </form>
 
