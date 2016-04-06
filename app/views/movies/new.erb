@@ -1,6 +1,25 @@
- <form action="/tweets" method="post" id="form1">
-      <p><label> Content: </label> <input type="text" name="content" id="content"></p>
-      
+ <form action="/movies" method="post" id="form1">
+      <p><label> Title: </label> <input type="text" name="title" id="title"></p>
+      <p><label> Year Released: </label> <input type="text" name="year" id="year"></p>
+      <br><br>
+
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor1" id="actor1"></p>
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor2" id="actor2"></p>
+
+      <p><label>Choose from existing actors/actresses:(optional)</label>
+  	  <% Actor.all.each do |actor| %>
+      <input id="<%= actor.name %>" type="checkbox" name="actors[]" value="<%= actor.id %>">
+      <% end %></p>
+      <br><br>
+
+      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre1" id="genre1"></p>
+      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre2" id="genre2"></p>
+
+      <label>Choose from existing Genres:(optional) </label><br></br>
+  	  <% Genre.all.each do |genre| %>
+      <input id="<%= genre.name %>" type="checkbox" name="genres[]" value="<%= genre.id %>">
+      <% end %>
+ 
  </form>
 
 <button type="submit" form="form1" value="submit">submit</button>

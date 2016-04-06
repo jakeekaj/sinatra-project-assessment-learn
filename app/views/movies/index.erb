@@ -1,16 +1,13 @@
-<h1>Welcome, <%= @user.username %> </h1> 
+<h1>Movie List: </h1> 
 
-	<% @tweets.each do |x| %>
-<h4>Tweet:<a href="/tweets/<%= x.id %>"> <%= x.content %></a> </h4>
+<% y = 1 %>
+<% @movies.each do |x| %>
+<h4><%= y.to_s  %>. <a href="/movies/<%= x.slug %>"> <%= x.title %></a> (<%= x.year %>)</h4>
+ <% y+=1 %>
 <% end %>
-<p><a href="/tweets/new">Post a Tweet!</a></p>
+<p><a href="/movies/new">Add Movie</a></p>
+<br>
+<p><a href="/home">Home</a></p>
 <p><a href="/logout">Log Out</a></p>
-
-<h1>View tweets by User </h1> 
-
-<% @users.each do |y| %>
-<h4>User:<a href="/users/<%= y.slug %>"> <%= y.username %></a></h4>
-<% end %>
-
 
 

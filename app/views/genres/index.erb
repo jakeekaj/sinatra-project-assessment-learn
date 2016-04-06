@@ -1,0 +1,11 @@
+<h1>Genre List: </h1>
+<% y = 1 %>
+
+<% @genres.each do |x| %>
+<h4><%= y.to_s  %>. <a href="/genres/<%= x.slug %>"> <%= x.name %></a></h4>
+ <% y+=1 %>
+<% end %>
+<p><a href="/genres/new">Add Genre</a></p>
+<br>
+<p><a href="/home">Home</a></p>
+<p><a href="/logout">Log Out</a></p>

@@ -5,8 +5,6 @@ class MoviesController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
-    @user = current_user
-    @users = User.all
     @movies = Movie.all
     erb :'movies/index'
    end
