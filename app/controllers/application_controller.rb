@@ -1,4 +1,9 @@
 require './config/environment'
+require 'sinatra'
+require 'sinatra/activerecord'
+require 'sinatra/flash'
+require 'sinatra/redirect_with_flash'
+
 
 class ApplicationController < Sinatra::Base
 
@@ -7,11 +12,13 @@ class ApplicationController < Sinatra::Base
     set :views, 'app/views'
     enable :sessions
     set :session_secret, "drowssap"
+    register Sinatra::Flash
+    register Sinatra::RedirectWithFlash
   end
 
  get "/" do
  	if logged_in?
-      redirect "/home"
+      redirect "/home" 
     else
     erb :index
     end

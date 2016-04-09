@@ -12,9 +12,15 @@ gem 'pry'
 gem 'bcrypt'
 gem "tux"
 gem "sinatra-flash"
+gem "rerun"
+gem "sinatra-redirect-with-flash"
+
 
 group :test do
+
   gem 'shotgun'
+  gem "sinatra-redirect-with-flash"
+  gem 'rerun'
   gem "sinatra-flash"
   gem 'rspec'
   gem 'capybara'
