@@ -6,3 +6,12 @@
 </form>
 
 <p><a href="/signup">Not a user? Sign up here</a></p>
+
+<% if @notice %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @notice %>
+  </div>
+<% end %>

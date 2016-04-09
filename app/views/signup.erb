@@ -5,3 +5,14 @@
   <input type="password" name="password" placeholder="Password:">
   <input type="submit" value="Sign Up">
 </form>
+
+If you're already a member, you can <a href="/login">Log In</a> here.
+
+<% if @notice %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @notice %>
+  </div>
+<% end %>
