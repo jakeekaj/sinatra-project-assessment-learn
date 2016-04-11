@@ -139,17 +139,17 @@ class ShowsController < ApplicationController
       @show.genres << e
     end
     @show.actors.delete_all
-    if params[:show][:actor_ids]
-      params[:show][:actor_ids].each do |actor|
-      j = Actor.find(actor)
-      @show.actors << j
+    if params[:actors]
+      params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @show.actors << c
       end
     end
     @show.genres.delete_all
-    if params[:show][:genre_ids]
-      params[:show][:genre_ids].each do |genre|
-      x = Genre.find(genre)
-      @show.genres << x
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @show.genres << f
       end
     end
     if @show.save

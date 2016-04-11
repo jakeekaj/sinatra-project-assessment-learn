@@ -6,6 +6,7 @@ class Actor < ActiveRecord::Base
   has_many :movies, :through => :actor_movies
   has_many :actor_shows
   has_many :shows, :through => :actor_shows
+  validates :name, presence: true
 
   def slug
   	x = self.name

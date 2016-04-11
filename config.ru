@@ -6,6 +6,7 @@ end
 
 
 use Rack::MethodOverride
+use ActorsController
 use MoviesController
 use ShowsController
 run ApplicationController

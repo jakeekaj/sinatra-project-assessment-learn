@@ -1,28 +1,12 @@
- <form action="/movies" method="post" id="form1">
-      <p><label> Title: *</label> <input type="text" name="title" id="title"></p>
-      <p><label> Year Released: *</label> <input type="text" name="year" id="year"></p>
-      <br><br>
 
-      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor1" id="actor1"></p>
-      <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor2" id="actor2"></p>
-
-      <p><label>Choose from existing actors/actresses:(optional)</label>
-  	  <% Actor.all.order(:name).each do |actor| %>
-      <input id="<%= actor.name %>" type="checkbox" name="actors[]" value="<%= actor.id %>"><%=actor.name%></input>
-      <% end %></p>
-      <br><br>
-
-      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre1" id="genre1"></p>
-      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre2" id="genre2"></p>
-
-      <label>Choose from existing Genres:(optional) </label><br></br>
-  	  <% Genre.all.order(:name).each do |genre| %>
-      <input id="<%= genre.name %>" type="checkbox" name="genres[]" value="<%= genre.id %>"><%=genre.name%></input>
-      <% end %>
- 
- </form>
-
-<button type="submit" form="form1" value="submit">submit</button>
+<% if @error %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @error %>
+  </div>
+<% end %>
 
 <% if @notice %>
   <div style="background-color:red;
@@ -32,3 +16,32 @@
   <%= @notice %>
   </div>
 <% end %>
+
+
+ <form action="/movies" method="post" id="form1">
+      <p><label> Title: *</label> <input type="text" class="form-control" name="title" id="title"></p>
+      <p><label> Year Released: *</label> <input type="text" class="form-control" name="year" id="year"></p>
+      <br><br>
+
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" class="form-control" name="actor1" id="actor1"></p>
+      <p><label> Add a new actor/actress:(optional) </label> <input type="text" class="form-control" name="actor2" id="actor2"></p>
+
+      <p><label>Choose from existing actors/actresses:(optional)</label>
+  	  <% Actor.all.order(:name).each do |actor| %>
+      <div class="checkbox"><label>
+      <input id="<%= actor.name %>" type="checkbox" name="actors[]" value="<%= actor.id %>"><a href='/actors/<%= actor.slug %>' target="_blank" ><%=actor.name%></a></input></label></div>
+      <% end %></p>
+      <br><br>
+
+      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre1" class="form-control" id="genre1"></p>
+      <p><label> Add a new genre:(optional) </label> <input type="text" name="genre2"  class="form-control" id="genre2"></p>
+
+      <label>Choose from existing Genres:(optional) </label><br></br>
+  	  <% Genre.all.order(:name).each do |genre| %>
+      <div class="checkbox"><label>
+      <input id="<%= genre.name %>" type="checkbox" name="genres[]" value="<%= genre.id %>"><a href='/genres/<%= genre.slug %>' target="_blank" ><%=genre.name%></a></input></label></div>
+      <% end %>
+ 
+ </form>
+
+<button type="submit" class="btn btn-info" form="form1" value="submit">submit</button>

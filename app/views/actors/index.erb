@@ -1,8 +1,8 @@
-<h1>Show List: </h1> 
+<h1>Actor/Actress List: </h1> 
 
 <% y = 1 %>
-<% @shows.each do |x| %>
-<h4><%= y.to_s  %>. <a href="/shows/<%= x.slug %>"> <%= x.title %></a> (<%= x.year %>) <em>Added by:<a href="/users/<%= x.user.username %>"><%= x.user.username %></a></em></h4>
+<% @actors.order(:name).each do |x| %>
+<h4><%= y.to_s  %>. <a href="/actors/<%= x.slug %>"> <%= x.name %></a> <em>Added by:<a href="/users/<%= x.user.username %>"><%= x.user.username %></a></em></h4>
  <% y+=1 %>
 <% end %>
 

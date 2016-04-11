@@ -1,32 +1,4 @@
 
-<h2>Title: <%= @show.title %></h2><h3>(<%= @show.year %>)</h3>
-
-
-
-<h3>Actors/Actresses:</h3>
-<% c = 1 %>
-<% @show.actors.all.each do |a| %>
-<h4><%= c.to_s %>. <a href='/actors/<%= a.slug %>'> <%= a.name %> </a></h4>
-<% c+=1 %>
-<% end %>
-<h3>Genres:</h3>
-<% d = 1 %>
-<% @show.genres.all.each do |g| %>
-<h4><%= d.to_s %>. <a href='/genres/<%= g.slug %>'> <%= g.name %> </a></h4>
-<% d+=1 %>
-<% end %>
-
-<form action="/shows/<%=@show.slug%>/delete" method="post" id="form1">
-        <input id="hidden" type="hidden" name="_method" value="DELETE">
-    </form>
-<button type="submit" form="form1" value="Delete Tweet">Delete Show</button>
-<form action="/shows/<%=@show.slug%>/edit" method="get" id="form2">
-    </form>
-<button type="submit" form="form2" value="Edit Tweet">Edit Show</button>
-<form action="/shows" method="get" id="form3"></form>
-<button type="submit" form="form3" value="Back to Index">Back to Index</button>
-
-
 <% if @notice %>
   <div style="background-color:green;
     color:white;
@@ -44,3 +16,39 @@
   <%= @error %>
   </div>
 <% end %>
+
+<h2>Name: <%= @actor.name %></h2>
+
+<h3>Movies:</h3>
+<% c = 1 %>
+<% @actor.movies.order(:title).each do |a| %>
+<h4><%= c.to_s %>. <a href='/movies/<%= a.slug %>'> <%= a.title %> (<%= a.year %>) </a></h4>
+<% c+=1 %>
+<% end %>
+
+<h3>TV Shows:</h3>
+<% e = 1 %>
+<% @actor.shows.order(:title).each do |a| %>
+<h4><%= e.to_s %>. <a href='/shows/<%= a.slug %>'> <%= a.title %> (<%= a.year %>) </a></h4>
+<% e+=1 %>
+<% end %>
+
+
+<h3>Genres:</h3>
+<% d = 1 %>
+<% @actor.genres.order(:name).each do |g| %>
+<h4><%= d.to_s %>. <a href='/genres/<%= g.slug %>'> <%= g.name %> </a></h4>
+<% d+=1 %>
+<% end %>
+
+<form action="/actors/<%=@actor.slug%>/delete" method="post" id="form1">
+        <input id="hidden" type="hidden" name="_method" value="DELETE">
+    </form>
+<button type="submit" form="form1" value="Delete Tweet">Delete Actor</button>
+<form action="/actors/<%=@actor.slug%>/edit" method="get" id="form2">
+    </form>
+<button type="submit" form="form2" value="Edit Tweet">Edit Actor</button>
+<form action="/actors" method="get" id="form3"></form>
+<button type="submit" form="form3" value="Back to Index">Back to Index</button>
+
+

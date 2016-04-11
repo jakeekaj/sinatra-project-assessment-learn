@@ -139,17 +139,17 @@ class MoviesController < ApplicationController
       @movie.genres << e
     end
     @movie.actors.delete_all
-    if params[:movie][:actor_ids]
-      params[:movie][:actor_ids].each do |actor|
-      j = Actor.find(actor)
-      @movie.actors << j
+    if params[:actors]
+      params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @movie.actors << c
       end
     end
     @movie.genres.delete_all
-    if params[:movie][:genre_ids]
-      params[:movie][:genre_ids].each do |genre|
-      x = Genre.find(genre)
-      @movie.genres << x
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @movie.genres << f
       end
     end
     if @movie.save
