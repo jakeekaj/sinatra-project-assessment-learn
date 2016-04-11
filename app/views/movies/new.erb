@@ -7,7 +7,7 @@
       <p><label> Add a new actor/actress:(optional) </label> <input type="text" name="actor2" id="actor2"></p>
 
       <p><label>Choose from existing actors/actresses:(optional)</label>
-  	  <% Actor.all.each do |actor| %>
+  	  <% Actor.all.order(:name).each do |actor| %>
       <input id="<%= actor.name %>" type="checkbox" name="actors[]" value="<%= actor.id %>"><%=actor.name%></input>
       <% end %></p>
       <br><br>
@@ -16,7 +16,7 @@
       <p><label> Add a new genre:(optional) </label> <input type="text" name="genre2" id="genre2"></p>
 
       <label>Choose from existing Genres:(optional) </label><br></br>
-  	  <% Genre.all.each do |genre| %>
+  	  <% Genre.all.order(:name).each do |genre| %>
       <input id="<%= genre.name %>" type="checkbox" name="genres[]" value="<%= genre.id %>"><%=genre.name%></input>
       <% end %>
  

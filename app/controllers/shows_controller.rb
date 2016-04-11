@@ -5,9 +5,11 @@ class ShowsController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
-    @user = current_user
-    @users = User.all
     @shows = Show.all
+    @notice = session[:notice]
+    session[:notice] = nil
+    @error = session[:error]
+    session[:error] = nil
     erb :'shows/index'
    end
   end
@@ -17,63 +19,139 @@ class ShowsController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
+    @notice = session[:notice]
+    session[:notice] = nil
     erb :'shows/new'
     end
   end
 
   post '/shows' do
-    if params[:content] == "" 
-      redirect '/shows/new'
+    @show = Show.new(title: params[:title],year: params[:year], user_id: current_user.id)
+    ##Handle actors
+    if params[:actor1] != ""
+    a = Actor.new(name: params[:actor1], user_id: current_user.id)
+    @show.actors << a
+    end
+    if params[:actor2] != ""
+    b = Actor.new(name: params[:actor2], user_id: current_user.id)
+    @show.actors << b
+    end
+    if params[:actors]
+      params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @show.actors << c
+      end
+    end
+    ##Handle genres
+    if params[:genre1] != ""
+    d = Genre.new(name: params[:genre1], user_id: current_user.id)
+    @show.genres << d
+    end
+    if params[:genre2] != ""
+    e = Genre.new(name: params[:genre2], user_id: current_user.id)
+    @show.genres << e
+    end
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @show.genres << f
+      end
+    end
+
+    if @show.save
+    session[:notice] = "Show successfully saved!"
+    redirect '/shows/' + @show.slug
     else
-    @show = Show.create(content: params[:content], user_id: current_user.id)
-    redirect '/shows/' + @show.id.to_s
-    end  
+    session[:notice] = "Show not saved! Please fill * required fields."
+    redirect '/shows/new'
+    end
+
   end
 
 
 
-  get '/shows/:id' do
+  get '/shows/:slug' do
     if !logged_in?
       redirect "/login"
     else
-    @show = Show.find(params[:id])
+    @show = Show.find_by_slug(params[:slug])
+    @notice = session[:notice]
+    session[:notice] = nil
+    @error = session[:error]
+    session[:notice] = nil
     erb :'shows/show'
     end
   end
 
-  get '/shows/:id/edit' do
+  get '/shows/:slug/edit' do
     if !logged_in?
       redirect "/login"
     else
-    @show = Show.find(params[:id])
-      if current_user.shows.include?(@show)
-        if @show == nil
-          redirect "/shows"
-        else
-          erb :'shows/edit'
-        end
+    @error = session[:error]
+    session[:notice] = nil
+    @show = Show.find_by_slug(params[:slug])
+    if @show == nil
+      session[:error] = "Show does not exist"
+      redirect "/shows"
       else
-        redirect '/shows'
+      if current_user.shows.include?(@show)
+          erb :'shows/edit'
+        else
+        session[:error] = "You are not authorized to edit this show."
+        redirect '/shows/' + @show.slug
+      end
       end
     end
   end
 
-  patch '/shows/:id' do
-    @show = Show.find(params[:id])
-    if params[:content] == "" 
-      redirect '/shows/' + @show.id.to_s + '/edit'
+  patch '/shows/:slug' do
+    @show = Show.find_by_slug(params[:slug])
+    if params[:title] == "" 
+      session[:error] = "Please enter a Title"
+      redirect '/shows/' + @show.slug + '/edit'
     else
-    @show.content = params[:content]
+    @show.title = params[:title]
+    @show.year = params[:year]
+    if params[:actor1] != ""
+      a = Actor.create(name: params[:actor1], user_id: current_user.id)
+      @show.actors << a
+    end
+    if params[:actor2] != ""
+      b = Actor.create(name: params[:actor2], user_id: current_user.id)
+      @show.actors << b
+    end
+    if params[:genre1] != ""
+      d = Genre.create(name: params[:genre1], user_id: current_user.id)
+      @show.genres << d
+    end
+    if params[:genre2] != ""
+      e = Genre.create(name: params[:genre2], user_id: current_user.id)
+      @show.genres << e
+    end
+    if params[:show][:actor_ids]
+      params[:show][:actor_ids].each do |actor|
+      j = Actor.find(actor)
+      @show.actors << j
+      end
+    end
+    if params[:show][:genre_ids]
+      params[:show][:genre_ids].each do |genre|
+      x = Genre.find(genre)
+      @show.genres << x
+      end
+    end
     @show.save
-    redirect '/shows/' + @show.id.to_s
+    redirect '/shows/' + @show.slug
     end
   end
 
-  delete '/shows/:id/delete' do
-    if current_user.shows.include?(Show.find(params[:id]))
-    Show.find(params[:id]).destroy
+  delete '/shows/:slug/delete' do
+    if current_user.shows.include?(Show.find_by_slug(params[:slug]))
+    Show.find_by_slug(params[:slug]).destroy
+    session[:notice] = "Show deleted!"
     redirect '/shows'
     else
+    session[:error] = "You are not authorized to delete that show!"
     redirect '/shows'
     end
   end

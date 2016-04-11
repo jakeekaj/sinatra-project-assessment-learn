@@ -5,11 +5,12 @@ class MoviesController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
+    @title = "Movie List - JMDB"  
     @movies = Movie.all
     @notice = session[:notice]
     session[:notice] = nil
     @error = session[:error]
-    session[:notice] = nil
+    session[:error] = nil
     erb :'movies/index'
    end
   end
@@ -19,6 +20,7 @@ class MoviesController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
+    @title = "Add a new movie - JMDB"   
     @notice = session[:notice]
     session[:notice] = nil
     erb :'movies/new'
@@ -75,10 +77,11 @@ class MoviesController < ApplicationController
       redirect "/login"
     else
     @movie = Movie.find_by_slug(params[:slug])
+    @title = @movie.title.to_s + " " + @movie.year.to_s + " - JMDB"
     @notice = session[:notice]
     session[:notice] = nil
     @error = session[:error]
-    session[:notice] = nil
+    session[:error] = nil
     erb :'movies/show'
     end
   end
@@ -90,6 +93,7 @@ class MoviesController < ApplicationController
     @error = session[:error]
     session[:notice] = nil
     @movie = Movie.find_by_slug(params[:slug])
+    @title = "Edit " + @movie.title.to_s + " " + @movie.year.to_s + " - JMDB"  
     if @movie == nil
       session[:error] = "Movie does not exist"
       redirect "/movies"
@@ -128,12 +132,14 @@ class MoviesController < ApplicationController
       e = Genre.create(name: params[:genre2], user_id: current_user.id)
       @movie.genres << e
     end
+    @movie.actors.delete_all
     if params[:movie][:actor_ids]
       params[:movie][:actor_ids].each do |actor|
       j = Actor.find(actor)
       @movie.actors << j
       end
     end
+    @movie.genres.delete_all
     if params[:movie][:genre_ids]
       params[:movie][:genre_ids].each do |genre|
       x = Genre.find(genre)
