@@ -7,11 +7,11 @@
 
 <p><a href="/signup">Not a user? Sign up here</a></p>
 
-<% if @notice %>
+<% if @error %>
   <div style="background-color:red;
     color:white;
     text-align:center;
     padding:3px;">
-  <%= @notice %>
+  <%= @error %>
   </div>
 <% end %>

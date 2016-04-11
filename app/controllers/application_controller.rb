@@ -30,15 +30,15 @@ class ApplicationController < Sinatra::Base
   	if logged_in?
       redirect "/home"
     else
-      @notice = session[:notice]
-      session[:notice] = nil
+      @error = session[:error]
+      session[:error] = nil
       erb :signup
     end
   end
 
   post "/signup" do
     if params[:username] == "" || params[:password] == "" || params[:email] == ""
-      session[:notice] = "Please fill in all fields and try again."
+      session[:error] = "Please fill in all fields and try again."
       redirect "/signup"
       else
       user = User.create(username: params[:username], email: params[:email], password: params[:password] )
@@ -53,15 +53,15 @@ class ApplicationController < Sinatra::Base
   	if logged_in?
       redirect "/home"
     else
-      @notice = session[:notice]
-      session[:notice] = nil
+      @error = session[:error]
+      session[:error] = nil
       erb :login
     end
   end
 
   post "/login" do
     if params[:username] == "" || params[:password] == ""
-      session[:notice] = "Please fill in all fields and try again."
+      session[:error] = "Please fill in all fields and try again."
       redirect "/login"
      else
       user = User.find_by(username: params[:username] )
@@ -69,7 +69,7 @@ class ApplicationController < Sinatra::Base
         session[:user_id] = user.id
         redirect "/home"
         else
-        session[:notice] = "Invalid username or password. Please try again."
+        session[:error] = "Invalid username or password. Please try again."
         redirect "/login"
       end
     end

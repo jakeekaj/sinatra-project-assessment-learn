@@ -5,6 +5,7 @@ class ShowsController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
+    @title = "Show List - JMDB"  
     @shows = Show.all
     @notice = session[:notice]
     session[:notice] = nil
@@ -19,8 +20,11 @@ class ShowsController < ApplicationController
     if !logged_in?
       redirect "/login"
     else
+    @title = "Add a new show - JMDB"   
     @notice = session[:notice]
     session[:notice] = nil
+    @error = session[:error]
+    session[:error] = nil
     erb :'shows/new'
     end
   end
@@ -62,7 +66,7 @@ class ShowsController < ApplicationController
     session[:notice] = "Show successfully saved!"
     redirect '/shows/' + @show.slug
     else
-    session[:notice] = "Show not saved! Please fill * required fields."
+    session[:error] = "Show not saved! Please fill * required fields."
     redirect '/shows/new'
     end
 
@@ -75,10 +79,15 @@ class ShowsController < ApplicationController
       redirect "/login"
     else
     @show = Show.find_by_slug(params[:slug])
+    if @show == nil
+      session[:error] = "Show does not exist"
+      redirect "/shows"
+      end
+    @title = @show.title.to_s + " " + @show.year.to_s + " - JMDB"
     @notice = session[:notice]
     session[:notice] = nil
     @error = session[:error]
-    session[:notice] = nil
+    session[:error] = nil
     erb :'shows/show'
     end
   end
@@ -88,12 +97,13 @@ class ShowsController < ApplicationController
       redirect "/login"
     else
     @error = session[:error]
-    session[:notice] = nil
+    session[:error] = nil
     @show = Show.find_by_slug(params[:slug])
     if @show == nil
       session[:error] = "Show does not exist"
       redirect "/shows"
       else
+      @title = "Edit " + @show.title.to_s + " " + @show.year.to_s + " - JMDB"  
       if current_user.shows.include?(@show)
           erb :'shows/edit'
         else
@@ -106,8 +116,8 @@ class ShowsController < ApplicationController
 
   patch '/shows/:slug' do
     @show = Show.find_by_slug(params[:slug])
-    if params[:title] == "" 
-      session[:error] = "Please enter a Title"
+    if params[:title] == "" || params[:year] == ""
+      session[:error] = "Please enter both Title and Year!"
       redirect '/shows/' + @show.slug + '/edit'
     else
     @show.title = params[:title]
@@ -128,20 +138,27 @@ class ShowsController < ApplicationController
       e = Genre.create(name: params[:genre2], user_id: current_user.id)
       @show.genres << e
     end
+    @show.actors.delete_all
     if params[:show][:actor_ids]
       params[:show][:actor_ids].each do |actor|
       j = Actor.find(actor)
       @show.actors << j
       end
     end
+    @show.genres.delete_all
     if params[:show][:genre_ids]
       params[:show][:genre_ids].each do |genre|
       x = Genre.find(genre)
       @show.genres << x
       end
     end
-    @show.save
+    if @show.save
+    session[:notice] = "Show successfully edited!"
     redirect '/shows/' + @show.slug
+    else
+    session[:error] = "Show not edited! Please fill * required fields."
+    redirect '/shows/' + @show.slug + '/edit'
+    end
     end
   end
 
@@ -156,14 +173,5 @@ class ShowsController < ApplicationController
     end
   end
 
-  helpers do
-    def logged_in?
-      !!session[:user_id]
-    end
-
-    def current_user
-      User.find(session[:user_id])
-    end
-  end
 
 end

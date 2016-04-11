@@ -1,10 +1,27 @@
-<h1>Actors/Actresses List: </h1>
+<h1>Show List: </h1> 
+
 <% y = 1 %>
-<% @actors.each do |x| %>
-<h4><%= y.to_s  %>. <a href="/actors/<%= x.slug %>"> <%= x.name %></a></h4>
+<% @shows.each do |x| %>
+<h4><%= y.to_s  %>. <a href="/shows/<%= x.slug %>"> <%= x.title %></a> (<%= x.year %>) <em>Added by:<a href="/users/<%= x.user.username %>"><%= x.user.username %></a></em></h4>
  <% y+=1 %>
 <% end %>
-<p><a href="/actors/new">Add Actor/Actress</a></p>
-<br>
-<p><a href="/home">Home</a></p>
-<p><a href="/logout">Log Out</a></p>
+
+
+<% if @notice %>
+  <div style="background-color:green;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @notice %>
+  </div>
+<% end %>
+
+<% if @error %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @error %>
+  </div>
+<% end %>
+

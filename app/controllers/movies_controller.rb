@@ -23,6 +23,8 @@ class MoviesController < ApplicationController
     @title = "Add a new movie - JMDB"   
     @notice = session[:notice]
     session[:notice] = nil
+    @error = session[:error]
+    session[:error] = nil
     erb :'movies/new'
     end
   end
@@ -64,7 +66,7 @@ class MoviesController < ApplicationController
     session[:notice] = "Movie successfully saved!"
     redirect '/movies/' + @movie.slug
     else
-    session[:notice] = "Movie not saved! Please fill * required fields."
+    session[:error] = "Movie not saved! Please fill * required fields."
     redirect '/movies/new'
     end
 
@@ -77,6 +79,10 @@ class MoviesController < ApplicationController
       redirect "/login"
     else
     @movie = Movie.find_by_slug(params[:slug])
+    if @movie == nil
+      session[:error] = "Movie does not exist"
+      redirect "/movies"
+      end
     @title = @movie.title.to_s + " " + @movie.year.to_s + " - JMDB"
     @notice = session[:notice]
     session[:notice] = nil
@@ -91,13 +97,13 @@ class MoviesController < ApplicationController
       redirect "/login"
     else
     @error = session[:error]
-    session[:notice] = nil
+    session[:error] = nil
     @movie = Movie.find_by_slug(params[:slug])
-    @title = "Edit " + @movie.title.to_s + " " + @movie.year.to_s + " - JMDB"  
     if @movie == nil
       session[:error] = "Movie does not exist"
       redirect "/movies"
       else
+      @title = "Edit " + @movie.title.to_s + " " + @movie.year.to_s + " - JMDB"  
       if current_user.movies.include?(@movie)
           erb :'movies/edit'
         else
@@ -110,8 +116,8 @@ class MoviesController < ApplicationController
 
   patch '/movies/:slug' do
     @movie = Movie.find_by_slug(params[:slug])
-    if params[:title] == "" 
-      session[:error] = "Please enter a Title"
+    if params[:title] == "" || params[:year] == ""
+      session[:error] = "Please enter both Title and Year!"
       redirect '/movies/' + @movie.slug + '/edit'
     else
     @movie.title = params[:title]
@@ -146,8 +152,13 @@ class MoviesController < ApplicationController
       @movie.genres << x
       end
     end
-    @movie.save
+    if @movie.save
+    session[:notice] = "Movie successfully edited!"
     redirect '/movies/' + @movie.slug
+    else
+    session[:error] = "Movie not edited! Please fill * required fields."
+    redirect '/movies/' + @movie.slug + '/edit'
+    end
     end
   end
 
@@ -162,14 +173,5 @@ class MoviesController < ApplicationController
     end
   end
 
-  helpers do
-    def logged_in?
-      !!session[:user_id]
-    end
-
-    def current_user
-      User.find(session[:user_id])
-    end
-  end
 
 end

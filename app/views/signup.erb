@@ -8,11 +8,11 @@
 
 If you're already a member, you can <a href="/login">Log In</a> here.
 
-<% if @notice %>
+<% if @error %>
   <div style="background-color:red;
     color:white;
     text-align:center;
     padding:3px;">
-  <%= @notice %>
+  <%= @error %>
   </div>
 <% end %>

@@ -24,8 +24,16 @@
 
 <button type="submit" form="form1" value="submit">submit</button>
 
-<% if @notice %>
+<% if @error %>
   <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @error %>
+  </div>
+<% end %>
+<% if @notice %>
+  <div style="background-color:green;
     color:white;
     text-align:center;
     padding:3px;">
