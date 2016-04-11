@@ -17,6 +17,7 @@ class ApplicationController < Sinatra::Base
   end
 
  get "/" do
+  @title = "Welcome to JMDB"
  	if logged_in?
       redirect "/home" 
     else
@@ -25,6 +26,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/signup" do
+    @title = "Signup at JMDB"
   	if logged_in?
       redirect "/home"
     else
@@ -47,6 +49,7 @@ class ApplicationController < Sinatra::Base
 
 
   get "/login" do
+    @title = "Login to your JMDB Account"
   	if logged_in?
       redirect "/home"
     else
@@ -92,6 +95,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/home' do
+    @title = "JMDB HOMEPAGE"
     if !logged_in?
       redirect "/login"
     else
@@ -102,11 +106,11 @@ class ApplicationController < Sinatra::Base
 
   helpers do
     def logged_in?
-      !!session[:user_id]
+      !!current_user
     end
 
     def current_user
-      User.find(session[:user_id])
+      @current_user ||= User.find(session[:user_id]) if session[:user_id]
     end
   end
 

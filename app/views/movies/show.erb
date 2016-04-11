@@ -4,12 +4,16 @@
 
 
 <h3>Actors/Actresses:</h3>
+<% c = 1 %>
 <% @movie.actors.all.each do |a| %>
-<h4><%= a.name %></h4>
+<h4><%= c.to_s %>. <a href='/actors/<%= a.slug %>'> <%= a.name %> </a></h4>
+<% c+=1 %>
 <% end %>
 <h3>Genres:</h3>
+<% d = 1 %>
 <% @movie.genres.all.each do |g| %>
-<h4><%= g.name %></h4>
+<h4><%= d.to_s %>. <a href='/genres/<%= g.slug %>'> <%= g.name %> </a></h4>
+<% d+=1 %>
 <% end %>
 
 <form action="/movies/<%=@movie.slug%>/delete" method="post" id="form1">
@@ -24,7 +28,19 @@
 
 
 <% if @notice %>
-  <div style="border: 3px solid blue;">
+  <div style="background-color:green;
+    color:white;
+    text-align:center;
+    padding:3px;">
   <%= @notice %>
+  </div>
+<% end %>
+
+<% if @error %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @error %>
   </div>
 <% end %>

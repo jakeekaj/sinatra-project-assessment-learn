@@ -8,7 +8,7 @@ class Actor < ActiveRecord::Base
   has_many :shows, :through => :actor_shows
 
   def slug
-  	x = self.username
+  	x = self.name
   	x = x.downcase.gsub(" ","-")
     x
   end

@@ -8,7 +8,7 @@ class Genre < ActiveRecord::Base
   has_many :shows, :through => :show_genres
 
   def slug
-  	x = self.username
+  	x = self.name
   	x = x.downcase.gsub(" ","-")
     x
   end
