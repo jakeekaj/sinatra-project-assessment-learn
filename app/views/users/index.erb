@@ -1,0 +1,9 @@
+<h1>User List: </h1> 
+
+<% y = 1 %>
+<% @users.order(:username).each do |x| %>
+<h4><%= y.to_s  %>. <a href="/users/<%= x.slug %>"> <%= x.username %></a></h4>
+ <% y+=1 %>
+<% end %>
+
+

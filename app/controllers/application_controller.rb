@@ -89,11 +89,6 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  get '/users/:slug' do
-    @user = User.find_by_slug(params[:slug])
-    erb :'/users/show'
-  end
-
   get '/home' do
     @title = "JMDB HOMEPAGE"
     if !logged_in?

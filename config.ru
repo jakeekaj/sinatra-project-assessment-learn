@@ -6,6 +6,7 @@ end
 
 
 use Rack::MethodOverride
+use UsersController
 use GenresController
 use ActorsController
 use MoviesController
