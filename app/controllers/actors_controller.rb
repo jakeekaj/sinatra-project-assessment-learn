@@ -32,6 +32,14 @@ class ActorsController < ApplicationController
   post '/actors' do
     @actor = Actor.new(name: params[:name], user_id: current_user.id)
     ##Handle movies
+    if params[:movie][:title] != "" && params[:movie][:year] == "" 
+      session[:error] = "Actor was not saved. Movie cannot be added - Year is missing"
+      redirect '/actors/new'
+    end
+    if params[:movie][:title] == "" && params[:movie][:year] != "" 
+      session[:error] = "Actor was not saved. Movie cannot be added - Title is missing"
+      redirect '/actors/new'
+    end
     if params[:movie][:title] != "" && params[:movie][:year] != ""
     m = Movie.new(title: params[:movie][:title],year: params[:movie][:year], user_id: current_user.id)
     @actor.movies << m
@@ -43,6 +51,14 @@ class ActorsController < ApplicationController
       end
     end
     ##Handle tv shows
+    if params[:show][:title] != "" && params[:show][:year] == "" 
+      session[:error] = "Actor was not saved. Show cannot be added - Year is missing"
+      redirect '/actors/new'
+    end
+    if params[:show][:title] == "" && params[:show][:year] != "" 
+      session[:error] = "Actor was not saved. Show cannot be added - Title is missing"
+      redirect '/actors/new'
+    end
     if params[:show][:title] != "" && params[:show][:year] != ""
     x = Show.new(title: params[:show][:title],year: params[:show][:year], user_id: current_user.id)
     @actor.shows << x

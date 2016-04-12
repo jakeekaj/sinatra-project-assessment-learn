@@ -1,21 +1,54 @@
 
-<h4>Content: <%= @tweet.content %></h4>
+<% if @notice %>
+  <div style="background-color:green;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @notice %>
+  </div>
+<% end %>
 
-<form action="/tweets/<%=@tweet.id%>/delete" method="post" id="form1">
+<% if @error %>
+  <div style="background-color:red;
+    color:white;
+    text-align:center;
+    padding:3px;">
+  <%= @error %>
+  </div>
+<% end %>
+
+<h2>Name: <%= @genre.name %></h2>
+
+<h3>Movies:</h3>
+<% c = 1 %>
+<% @genre.movies.order(:title).each do |a| %>
+<h4><%= c.to_s %>. <a href='/movies/<%= a.slug %>'> <%= a.title %> (<%= a.year %>) </a></h4>
+<% c+=1 %>
+<% end %>
+
+<h3>TV Shows:</h3>
+<% e = 1 %>
+<% @genre.shows.order(:title).each do |a| %>
+<h4><%= e.to_s %>. <a href='/shows/<%= a.slug %>'> <%= a.title %> (<%= a.year %>) </a></h4>
+<% e+=1 %>
+<% end %>
+
+
+<h3>Actors/Actresses:</h3>
+<% d = 1 %>
+<% @genre.actors.order(:name).each do |g| %>
+<h4><%= d.to_s %>. <a href='/actors/<%= g.slug %>'> <%= g.name %> </a></h4>
+<% d+=1 %>
+<% end %>
+
+<form action="/genres/<%=@genre.slug%>/delete" method="post" id="form1">
         <input id="hidden" type="hidden" name="_method" value="DELETE">
-
     </form>
-
-<button type="submit" form="form1" value="Delete Tweet">Delete Tweet</button>
-
-<form action="/tweets/<%=@tweet.id%>/edit" method="get" id="form2">
-
+<button type="submit" form="form1" class="btn btn-danger" value="Delete Tweet">Delete Genre</button>
+<form action="/genres/<%=@genre.slug%>/edit" method="get" id="form2">
     </form>
+<button type="submit" form="form2" class="btn btn-warning" value="Edit Tweet">Edit Genre</button>
+<form action="/genres" method="get" id="form3"></form>
+<button type="submit" form="form3" class="btn btn-default" value="Back to Index">Back to Index</button>
 
-<button type="submit" form="form2" value="Edit Tweet">Edit Tweet</button>
 
-<form action="/tweets" method="get" id="form3">
-
-    </form>
-
-<button type="submit" form="form3" value="Back to Index">Back to Index</button>
