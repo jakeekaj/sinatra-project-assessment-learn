@@ -21,7 +21,7 @@
       <br><br>
 
       <p><label> Add a new movie(optional): </label> <input type="text" class="form-control" name="movie[title]" id="movie_title"></p>
-      <p><label> Enter the year of the movie: </label> <input type="text" class="form-control" name="movie[year]" id="movie_year"></p>
+      <p><label> Enter the year of the movie(optional): </label> <input type="text" class="form-control" name="movie[year]" id="movie_year"></p>
 
       <p><label>Choose from existing movies:(optional)</label>
       <% Movie.all.order(:title).each do |movie| %>
@@ -31,7 +31,7 @@
       <br><br>
 
       <p><label> Add a new TV show(optional): </label> <input type="text" class="form-control" name="show[title]" id="show_title"></p>
-      <p><label> Enter the year of the TV show: </label> <input type="text" class="form-control" name="show[year]" id="show_year"></p>
+      <p><label> Enter the year of the TV show(optional): </label> <input type="text" class="form-control" name="show[year]" id="show_year"></p>
 
       <p><label>Choose from existing Tv shows:(optional)</label>
       <% Show.all.order(:title).each do |show| %>

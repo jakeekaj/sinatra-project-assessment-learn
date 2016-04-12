@@ -107,7 +107,7 @@ class ActorsController < ApplicationController
       session[:error] = "Actor does not exist"
       redirect "/actors"
       else
-      @title = "Edit " + @actor.title.to_s + " " + @actor.year.to_s + " - JMDB"  
+      @title = "Edit " + @actor.name.to_s + " - JMDB"  
       if current_user.actors.include?(@actor)
           erb :'actors/edit'
         else
@@ -120,41 +120,46 @@ class ActorsController < ApplicationController
 
   patch '/actors/:slug' do
     @actor = Actor.find_by_slug(params[:slug])
-    if params[:title] == "" || params[:year] == ""
-      session[:error] = "Please enter both Title and Year!"
+    if params[:name] == "" 
+      session[:error] = "Please enter name!"
       redirect '/actors/' + @actor.slug + '/edit'
     else
-    @actor.title = params[:title]
-    @actor.year = params[:year]
-    if params[:actor1] != ""
-      a = Actor.create(name: params[:actor1], user_id: current_user.id)
-      @actor.actors << a
+    @actor.name = params[:name]
+    @actor.movies.delete_all
+    if params[:movies]
+      params[:movies].each do |movie|
+      c = Movie.find(movie)
+      @actor.movies << c
+      end
     end
-    if params[:actor2] != ""
-      b = Actor.create(name: params[:actor2], user_id: current_user.id)
-      @actor.actors << b
-    end
-    if params[:genre1] != ""
-      d = Genre.create(name: params[:genre1], user_id: current_user.id)
-      @actor.genres << d
-    end
-    if params[:genre2] != ""
-      e = Genre.create(name: params[:genre2], user_id: current_user.id)
-      @actor.genres << e
-    end
-    @actor.actors.delete_all
-    if params[:actor][:actor_ids]
-      params[:actor][:actor_ids].each do |actor|
-      j = Actor.find(actor)
-      @actor.actors << j
+    @actor.shows.delete_all
+    if params[:shows]
+      params[:shows].each do |show|
+      f = Show.find(show)
+      @actor.shows << f
       end
     end
     @actor.genres.delete_all
-    if params[:actor][:genre_ids]
-      params[:actor][:genre_ids].each do |genre|
-      x = Genre.find(genre)
-      @actor.genres << x
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @actor.genres << f
       end
+    end
+    ##Handle new movie addition
+    if params[:movie][:title] != ""
+      a = Movie.create(title: params[:movie][:title],year: params[:movie][:year], user_id: current_user.id)
+      @actor.movies << a
+    end
+    ##Handle new show addition
+    if params[:show][:title] != ""
+      d = Show.create(title: params[:show][:title],year: params[:show][:year], user_id: current_user.id)
+      @actor.shows << d
+    end
+    ##Handle new genre addition
+    if params[:genre] != ""
+      e = Genre.create(name: params[:genre], user_id: current_user.id)
+      @actor.genres << e
     end
     if @actor.save
     session[:notice] = "Actor successfully edited!"

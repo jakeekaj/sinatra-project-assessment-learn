@@ -4,7 +4,7 @@ class Show < ActiveRecord::Base
   has_many :actors, :through => :actor_shows
   has_many :show_genres
   has_many :genres, :through => :show_genres
-  validates :title, presence: true, length: { minimum: 5 }
+  validates :title, presence: true, length: { minimum: 2 }
   validates :year, presence: true, length: { minimum: 4 }
 
   def slug

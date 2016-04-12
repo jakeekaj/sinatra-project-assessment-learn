@@ -122,6 +122,20 @@ class MoviesController < ApplicationController
     else
     @movie.title = params[:title]
     @movie.year = params[:year]
+    @movie.actors.delete_all
+    if params[:actors]
+      params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @movie.actors << c
+      end
+    end
+    @movie.genres.delete_all
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @movie.genres << f
+      end
+    end
     if params[:actor1] != ""
       a = Actor.create(name: params[:actor1], user_id: current_user.id)
       @movie.actors << a
@@ -137,20 +151,6 @@ class MoviesController < ApplicationController
     if params[:genre2] != ""
       e = Genre.create(name: params[:genre2], user_id: current_user.id)
       @movie.genres << e
-    end
-    @movie.actors.delete_all
-    if params[:actors]
-      params[:actors].each do |actor|
-      c = Actor.find(actor)
-      @movie.actors << c
-      end
-    end
-    @movie.genres.delete_all
-    if params[:genres]
-      params[:genres].each do |genre|
-      f = Genre.find(genre)
-      @movie.genres << f
-      end
     end
     if @movie.save
     session[:notice] = "Movie successfully edited!"

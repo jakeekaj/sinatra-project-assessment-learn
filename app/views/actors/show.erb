@@ -44,11 +44,11 @@
 <form action="/actors/<%=@actor.slug%>/delete" method="post" id="form1">
         <input id="hidden" type="hidden" name="_method" value="DELETE">
     </form>
-<button type="submit" form="form1" value="Delete Tweet">Delete Actor</button>
+<button type="submit" form="form1" class="btn btn-danger" value="Delete Tweet">Delete Actor</button>
 <form action="/actors/<%=@actor.slug%>/edit" method="get" id="form2">
     </form>
-<button type="submit" form="form2" value="Edit Tweet">Edit Actor</button>
+<button type="submit" form="form2" class="btn btn-warning" value="Edit Tweet">Edit Actor</button>
 <form action="/actors" method="get" id="form3"></form>
-<button type="submit" form="form3" value="Back to Index">Back to Index</button>
+<button type="submit" form="form3" class="btn btn-default" value="Back to Index">Back to Index</button>
 
 

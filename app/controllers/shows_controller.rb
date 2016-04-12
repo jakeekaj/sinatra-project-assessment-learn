@@ -122,6 +122,20 @@ class ShowsController < ApplicationController
     else
     @show.title = params[:title]
     @show.year = params[:year]
+    @show.actors.delete_all
+    if params[:actors]
+      params[:actors].each do |actor|
+      c = Actor.find(actor)
+      @show.actors << c
+      end
+    end
+    @show.genres.delete_all
+    if params[:genres]
+      params[:genres].each do |genre|
+      f = Genre.find(genre)
+      @show.genres << f
+      end
+    end
     if params[:actor1] != ""
       a = Actor.create(name: params[:actor1], user_id: current_user.id)
       @show.actors << a
@@ -137,20 +151,6 @@ class ShowsController < ApplicationController
     if params[:genre2] != ""
       e = Genre.create(name: params[:genre2], user_id: current_user.id)
       @show.genres << e
-    end
-    @show.actors.delete_all
-    if params[:actors]
-      params[:actors].each do |actor|
-      c = Actor.find(actor)
-      @show.actors << c
-      end
-    end
-    @show.genres.delete_all
-    if params[:genres]
-      params[:genres].each do |genre|
-      f = Genre.find(genre)
-      @show.genres << f
-      end
     end
     if @show.save
     session[:notice] = "Show successfully edited!"
