@@ -9,7 +9,7 @@ class Show < ActiveRecord::Base
 
   def slug
   	x = self.title
-  	x = x.downcase.gsub(" ","-")
+  	x = x.downcase.gsub(/[^a-z ]/,"").gsub(" ","-")
     x
   end
 

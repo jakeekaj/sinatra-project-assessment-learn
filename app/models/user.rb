@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   def slug
   	x = self.username
-  	x = x.downcase.gsub(" ","-")
+  	x = x.downcase.gsub(/[^a-z ]/,"").gsub(" ","-")
     x
   end
 

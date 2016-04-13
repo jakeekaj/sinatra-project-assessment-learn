@@ -8,7 +8,7 @@ class Movie < ActiveRecord::Base
   validates :year, presence: true, length: { minimum: 4 }
 
   def slug
-  	x = self.title.to_s.downcase.gsub(" ","-")
+  	x = self.title.to_s.downcase.gsub(/[^a-z ]/,"").gsub(" ","-")
     x
   end
 

@@ -1,6 +1,6 @@
 class ActorsController < ApplicationController
 
-
+  #show all actors
   get '/actors' do
     if !logged_in?
       redirect "/login"
@@ -15,7 +15,7 @@ class ActorsController < ApplicationController
    end
   end
 
-
+  #enter new actor
   get '/actors/new' do
     if !logged_in?
       redirect "/login"
@@ -93,7 +93,7 @@ class ActorsController < ApplicationController
   end
 
 
-
+  #show page for individual actor
   get '/actors/:slug' do
     if !logged_in?
       redirect "/login"
@@ -112,6 +112,7 @@ class ActorsController < ApplicationController
     end
   end
 
+  #edit page for individual actor
   get '/actors/:slug/edit' do
     if !logged_in?
       redirect "/login"
@@ -186,7 +187,7 @@ class ActorsController < ApplicationController
     end
     end
   end
-
+  #delete actor
   delete '/actors/:slug/delete' do
     if current_user.actors.include?(Actor.find_by_slug(params[:slug]))
     Actor.find_by_slug(params[:slug]).destroy

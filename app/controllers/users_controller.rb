@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-
+  #display all users
   get '/users' do
     if !logged_in?
       redirect "/login"
@@ -15,6 +15,7 @@ class UsersController < ApplicationController
    end
   end
 
+  #display all user contributions
   get '/users/:slug' do
     if !logged_in?
       redirect "/login"
