@@ -163,12 +163,24 @@ class GenresController < ApplicationController
       end
     end
     ##Handle new movie addition
-    if params[:movie][:title] != ""
+    if params[:movie][:title] != "" && params[:movie][:year] == ""
+      session[:error] = "Please enter year of movie!"
+      redirect '/genres/' + @genre.slug + '/edit'
+    elsif params[:movie][:title] == "" && params[:movie][:year] != ""
+      session[:error] = "Please enter title of movie!"
+      redirect '/genres/' + @genre.slug + '/edit'
+    elsif params[:movie][:title] != "" && params[:movie][:year] != ""
       a = Movie.create(title: params[:movie][:title],year: params[:movie][:year], user_id: current_user.id)
       @genre.movies << a
     end
     ##Handle new show addition
-    if params[:show][:title] != ""
+    if params[:show][:title] != "" && params[:show][:year] == ""
+      session[:error] = "Please enter year of show!"
+      redirect '/genres/' + @genre.slug + '/edit'
+    elsif params[:show][:title] == "" && params[:show][:year] != ""
+      session[:error] = "Please enter title of show!"
+      redirect '/genres/' + @genre.slug + '/edit'
+    elsif params[:show][:title] != "" && params[:show][:year] != ""
       d = Show.create(title: params[:show][:title],year: params[:show][:year], user_id: current_user.id)
       @genre.shows << d
     end
